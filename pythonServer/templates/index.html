@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" as="style" crossorigin
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+  <title>{{ title }}</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      position: relative;
+      height: 100dvh;
+      padding: 0;
+      margin: 0;
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    }
+
+    #app {
+      display: flex;
+      height: 100%;
+      align-items: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      width: 320px;
+      margin: 0 auto;
+      border: 1px solid gainsboro;
+      border-radius: 0.5rem;
+      gap: 1rem;
+      box-shadow: 0 0.5px 1px -0.5px hsl(20deg 5% 10% / 0.2);
+    }
+
+    .value {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input {
+      border-radius: 0.25rem;
+      border: 1px solid gainsboro;
+      padding: 0.25rem 0.5rem;
+      font: unset;
+    }
+
+    button {
+      border-radius: 0.25rem;
+      border: none;
+      background: black;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font: unset;
+      transition: color 0.2s;
+      cursor: pointer;
+
+      &:hover {
+        background: hsl(20deg 5% 5%);
+      }
+
+      &:active {
+        background: hsl(20deg 5% 10%);
+      }
+    }
+
+    .toast {
+      position: absolute;
+      width: 320px;
+      background: white;
+      border: 1px solid gainsboro;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      box-shadow:
+        0 2px 2px -1px hsl(20deg 5% 10% / 0.05),
+        0 4px 4px -2px hsl(20deg 5% 10% / 0.05),
+        0 8px 8px -4px hsl(20deg 5% 10% / 0.05);
+      top: 1rem;
+      left: calc(50% - 160px);
+
+      animation: toast_in 0.4s forwards cubic-bezier(0.24, 0.76, 0.51, 1.01);
+    }
+
+    @keyframes toast_in {
+      from {
+        opacity: 0;
+        margin-top: -10%;
+      }
+
+      to {
+        opacity: 1;
+        margin-top: 0%;
+      }
+    }
+
+    @keyframes toast_out {
+      from {
+        opacity: 1;
+        margin-top: 0%;
+      }
+
+      to {
+        opacity: 0;
+        margin-top: 1%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  {% if toast_message %}
+  <div class="toast">
+    <div class="toast__message">{{ toast_message }}</div>
+  </div>
+  {% endif %}
+  <div id="app">
+    <form method="post">
+      <div class="value">
+        <label for="temp">적정 온도</label>
+        <input type="number" id="temp" name="temp" placeholder="적정 온도" value="{{ temp }}" required />
+      </div>
+      <div class="value">
+        <label for="lumi">적정 조도</label>
+        <input type="number" id="lumi" name="lumi" placeholder="적정 조도" value="{{ lumi }}" required />
+      </div>
+      <button>저장</button>
+    </form>
+  </div>
+  <script>
+    const toast = document.querySelector(".toast");
+    if (toast != null) {
+      toast.addEventListener("click", (e) => close(e.currentTarget));
+      setTimeout(() => {
+        close(toast)
+      }, 5000);
+    }
+
+    function close(toast) {
+      toast.style.animationName = "toast_out";
+    }
+  </script>
+</body>
+
