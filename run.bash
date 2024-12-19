@@ -4,6 +4,7 @@ BASE_DIR="$(dirname "$0")"
 
 cd "$BASE_DIR/Mobius" || { echo "Can't find Mobius directory."; exit 1; }
 echo "Running Mobius server..."
+npm install
 node mobius.js > mobius.log 2>&1 &
 MOBIUS_PID=$!
 echo "Mobius server started with (PID: $MOBIUS_PID)"
@@ -13,6 +14,7 @@ cd "../"
 
 cd "$BASE_DIR/nCube" || { echo "Can't find nCube directory."; exit 1; }
 echo "Running nCube server..."
+npm install
 node thyme.js > thyme.log 2>&1 &
 NCUBE_PID=$!
 echo "nCube server started with (PID: $NCUBE_PID)"
