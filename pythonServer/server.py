@@ -12,12 +12,16 @@ import os
 HOST = "localhost"
 PORT = 1883
 LED_PIN = 14
+MOTOR_PIN1 = 5
+MOTOR_PIN2 = 6
 
 class Sensor():
     def __init__(self):
         self.serialPort = os.popen("ls /dev/ttyACM*").read().strip()
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(LED_PIN, GPIO.OUT)
+        GPIO.setup(MOTOR_PIN1, GPIO.OUT)
+        GPIO.setup(MOTOR_PIN2, GPIO.OUT)
         self.arduino = serial.Serial(self.serialPort, '9600', timeout=1)
         self.client = mqtt.Client("Publisher")
         time.sleep(2)
@@ -63,10 +67,17 @@ class Sensor():
         self.client.publish("/lumi", self.dataList[3])
 
     def checkActuator(self):
+        print(self.dataList[2], self.optimalTemp)
         if self.dataList[3] <= self.optimalLumi:
-            GPIO.output(14, GPIO.HIGH)
+            GPIO.output(LED_PIN, GPIO.HIGH)
         elif self.dataList[3] > self.optimalLumi:
-            GPIO.output(14, GPIO.LOW)
+            GPIO.output(LED_PIN, GPIO.LOW)
+        if self.dataList[2] <= self.optimalTemp:
+            GPIO.output(MOTOR_PIN1, GPIO.LOW)
+            GPIO.output(MOTOR_PIN2, GPIO.LOW)
+        elif self.dataList[2] > self.optimalTemp:
+            GPIO.output(MOTOR_PIN1, GPIO.HIGH)
+            GPIO.output(MOTOR_PIN2, GPIO.LOW)
     
     def __del__(self):
         self.arduino.close()
