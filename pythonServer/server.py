@@ -67,7 +67,6 @@ class Sensor():
         self.client.publish("/lumi", self.dataList[3])
 
     def checkActuator(self):
-        print(self.dataList[2], self.optimalTemp)
         if self.dataList[3] <= self.optimalLumi:
             GPIO.output(LED_PIN, GPIO.HIGH)
         elif self.dataList[3] > self.optimalLumi:
